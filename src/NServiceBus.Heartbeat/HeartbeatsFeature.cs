@@ -10,7 +10,7 @@
     {
         protected override void Setup(FeatureConfigurationContext context)
         {
-            if (!context.Settings.TryGet("NServiceBus.Heartbeat.Interval", out TimeSpan interval))
+            if (!context.Settings.TryGet("NServiceBus.Heartbeat.Interval", out TimeSpan interval)) // Does the candidate detect magic strings?
             {
                 interval = TimeSpan.FromSeconds(10);
             }
@@ -26,7 +26,7 @@
             var destinationQueue = context.Settings.Get<string>("NServiceBus.Heartbeat.Queue");
             var backend = new ServiceControlBackend(destinationQueue, replyToAddress);
 
-            context.RegisterStartupTask(b => new HeartbeatSender(b.GetRequiredService<IMessageDispatcher>(), b.GetRequiredService<HostInformation>(),
+            context.RegisterStartupTask(b => new HeartbeatSender(b.GetRequiredService<IMessageDispatcher>(), b.GetRequiredService<HostInformation>(), //Does the candidate understand the builder / DI?
                 backend, context.Settings.EndpointName(), interval, ttl));
         }
     }
